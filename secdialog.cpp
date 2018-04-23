@@ -76,3 +76,63 @@ void SecDialog::on_pushButton_4_refresh_clicked()
     conn.connClose();
     qDebug() << (modal->rowCount());
 }
+
+void SecDialog::on_pushButton_2_update_clicked()
+{
+    QString  uid, name, graduation;
+    uid=ui->uid->text();
+    name=ui->sname->text();
+    graduation=ui->grad->text();
+
+    //SecDialog secDlog;
+
+    if(!conn.connOpen())
+    {
+       qDebug()<<"Failed to open Database";
+       return;
+    }
+
+    conn.connOpen();
+    QSqlQuery qry;
+    qry.prepare("update Students set uid='"+uid+"',name='"+name+"',graduation='"+graduation+"' where uid='"+uid+"'");
+
+    if(qry.exec())
+    {
+        QMessageBox::information(this,tr("Edit"), tr("Information Updated."));
+        conn.connClose();
+    }
+    else
+    {
+        QMessageBox::critical(this,tr("Error::"),qry.lastError().text());
+    }
+}
+
+void SecDialog::on_pushButton_3_delete_clicked()
+{
+    QString  uid, name, graduation;
+    uid=ui->uid->text();
+    //name=ui->sname->text();
+    //graduation=ui->grad->text();
+
+    //SecDialog secDlog;
+
+    if(!conn.connOpen())
+    {
+       qDebug()<<"Failed to open Database";
+       return;
+    }
+
+    conn.connOpen();
+    QSqlQuery qry;
+    qry.prepare("delete from Students where uid=='"+uid+"'");
+
+    if(qry.exec())
+    {
+        QMessageBox::information(this,tr("Delete"), tr("Information Deleted."));
+        conn.connClose();
+    }
+    else
+    {
+        QMessageBox::critical(this,tr("Error::"),qry.lastError().text());
+    }
+}
