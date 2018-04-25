@@ -32,10 +32,11 @@ void SecDialog::on_pushButton_4_load_table_clicked()
 
 void SecDialog::on_pushButton_clicked()
 {
-    QString  uid, name, graduation;
+    QString  uid, Sname, graduation, major;
     uid=ui->uid->text();
-    name=ui->sname->text();
+    Sname=ui->sname->text();
     graduation=ui->grad->text();
+    major=ui->major->text();
 
     //SecDialog secDlog;
 
@@ -47,11 +48,11 @@ void SecDialog::on_pushButton_clicked()
 
     conn.connOpen();
     QSqlQuery qry;
-    qry.prepare("insert into Students (uid,name,graduation) values ('"+uid+"','"+name+"','"+graduation+"')");
+    qry.prepare("insert into Students (uid,Sname,graduation,major) values ('"+uid+"','"+Sname+"','"+graduation+"','"+major+"')");
 
     if(qry.exec())
     {
-        QMessageBox::critical(this,tr("Save"), tr("Information Saved."));
+        QMessageBox::information(this,tr("Save"), tr("Information Saved."));
         conn.connClose();
     }
     else
@@ -79,10 +80,11 @@ void SecDialog::on_pushButton_4_refresh_clicked()
 
 void SecDialog::on_pushButton_2_update_clicked()
 {
-    QString  uid, name, graduation;
+    QString  uid, Sname, graduation, major;
     uid=ui->uid->text();
-    name=ui->sname->text();
+    Sname=ui->sname->text();
     graduation=ui->grad->text();
+    major=ui->major->text();
 
     //SecDialog secDlog;
 
@@ -94,7 +96,7 @@ void SecDialog::on_pushButton_2_update_clicked()
 
     conn.connOpen();
     QSqlQuery qry;
-    qry.prepare("update Students set uid='"+uid+"',name='"+name+"',graduation='"+graduation+"' where uid='"+uid+"'");
+    qry.prepare("update Students set uid='"+uid+"',Sname='"+Sname+"',graduation='"+graduation+"',major='"+major+"' where uid='"+uid+"'");
 
     if(qry.exec())
     {
@@ -404,7 +406,7 @@ void SecDialog::on_pushButton_2_update_g_clicked()
 
     conn.connOpen();
     QSqlQuery qry;
-    qry.prepare("update Grades set uid='"+uid_g+"',CRN='"+crn_g+"',semester='"+semester_g+"',Grade='"+grade+"' where uid='"+uid_g+"'");
+    qry.prepare("update Grades set uid='"+uid_g+"',CRN='"+crn_g+"',semester='"+semester_g+"',Grade='"+grade+"' where uid='"+uid_g+"',CRN='"+crn_g+"',semester='"+semester_g+"'");
 
     if(qry.exec())
     {
@@ -419,10 +421,10 @@ void SecDialog::on_pushButton_2_update_g_clicked()
 
 void SecDialog::on_pushButton_3_delete_g_clicked()
 {
-    QString  uid_g, semester_g;
+    QString  uid_g,crn_g,semester_g;
     uid_g=ui->uid_g->text();
+    crn_g=ui->crn_g->text();
     semester_g=ui->semester_g->text();
-    //graduation=ui->grad->text();
 
     //SecDialog secDlog;
 
@@ -434,7 +436,7 @@ void SecDialog::on_pushButton_3_delete_g_clicked()
 
     conn.connOpen();
     QSqlQuery qry;
-    qry.prepare("delete from Grades where uid=='"+uid_g+"',semester=='"+semester_g+"'");
+    qry.prepare("delete from Grades where uid=='"+uid_g+"',CRN=='"+crn_g+"',semester=='"+semester_g+"'");
 
     if(qry.exec())
     {
@@ -454,11 +456,28 @@ void SecDialog::on_pushButton_4_refresh_g_clicked()
     conn.connOpen();
     QSqlQuery* qry=new QSqlQuery(conn.school);
 
-    qry->prepare("select Students.UID, Students.Sname, Courses.CRN, Courses.Cname, Courses.semester, Grades.Grade from Students,Courses,Grades where Students.UID=Grades.uid and Courses.CRN=Grades.CRN");
+    qry->prepare("select Students.UID, Students.Sname, Courses.CRN, Courses.Cname, Grades.semester, Grades.Grade from Students,Courses,Grades where Students.UID=Grades.uid and Courses.CRN=Grades.CRN");
 
     qry->exec();
     modal->setQuery(*qry);
     ui->tableView_5->setModel(modal);
+
+    conn.connClose();
+    qDebug() << (modal->rowCount());
+}
+
+void SecDialog::on_pushButton_4_average_clicked()
+{
+    QSqlQueryModel * modal=new QSqlQueryModel();
+
+    conn.connOpen();
+    QSqlQuery* qry=new QSqlQuery(conn.school);
+
+    qry->prepare("select Students.UID, Students.Sname AS Name, avg(Grades.Grade) AS Average from Students,Grades where Students.UID=Grades.uid");
+
+    qry->exec();
+    modal->setQuery(*qry);
+    ui->tableView_6->setModel(modal);
 
     conn.connClose();
     qDebug() << (modal->rowCount());
