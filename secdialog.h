@@ -26,6 +26,36 @@ private slots:
 
     void on_pushButton_4_refresh_clicked();
 
+    void on_pushButton_2_update_clicked();
+
+    void on_pushButton_3_delete_clicked();
+
+    void on_pushButton_3_save_c_clicked();
+
+    void on_pushButton_2_update_c_clicked();
+
+    void on_pushButton_3_delete_c_clicked();
+
+    void on_pushButton_4_refresh_c_clicked();
+
+    void on_pushButton_save_f_clicked();
+
+    void on_pushButton_2_update_f_clicked();
+
+    void on_pushButton_3_delete_f_clicked();
+
+    void on_pushButton_4_refresh_f_clicked();
+
+    void on_pushButton_save_g_clicked();
+
+    void on_pushButton_2_update_g_clicked();
+
+    void on_pushButton_3_delete_g_clicked();
+
+    void on_pushButton_4_refresh_g_clicked();
+
+    void on_pushButton_4_average_clicked();
+    
 private:
     Ui::SecDialog *ui;
 };
