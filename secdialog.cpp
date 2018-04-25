@@ -406,7 +406,7 @@ void SecDialog::on_pushButton_2_update_g_clicked()
 
     conn.connOpen();
     QSqlQuery qry;
-    qry.prepare("update Grades set uid='"+uid_g+"',CRN='"+crn_g+"',semester='"+semester_g+"',Grade='"+grade+"' where uid='"+uid_g+"',CRN='"+crn_g+"',semester='"+semester_g+"'");
+    qry.prepare("update Grades set uid='"+uid_g+"',CRN='"+crn_g+"',semester='"+semester_g+"',Grade='"+grade+"' where uid=='"+uid_g+"' and CRN=='"+crn_g+"' and semester=='"+semester_g+"'");
 
     if(qry.exec())
     {
@@ -436,7 +436,7 @@ void SecDialog::on_pushButton_3_delete_g_clicked()
 
     conn.connOpen();
     QSqlQuery qry;
-    qry.prepare("delete from Grades where uid=='"+uid_g+"',CRN=='"+crn_g+"',semester=='"+semester_g+"'");
+    qry.prepare("delete from Grades where uid=='"+uid_g+"' and CRN=='"+crn_g+"' and semester=='"+semester_g+"'");
 
     if(qry.exec())
     {
@@ -482,3 +482,4 @@ void SecDialog::on_pushButton_4_average_clicked()
     conn.connClose();
     qDebug() << (modal->rowCount());
 }
+
